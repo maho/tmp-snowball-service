@@ -38,8 +38,7 @@ class GameLogic:
         self.self_data = data["arena"]["state"][self.self_link]
         self.x = self.self_data["x"]
         self.y = self.self_data["y"]
-        self.w = data["arena"]["w"]
-        self.h = data["arena"]["h"]
+        self.w, self.h = data["arena"]["dims"]
         self.direction = self.self_data["direction"]
         self.pos2obj = defaultdict(lambda: None)
         for obj in data["arena"]["state"].values():

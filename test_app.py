@@ -14,8 +14,7 @@ def test_1vs1_will_throw(client):
     payload = {
         "_links": {"self": {"href": "http://me"}},
         "arena": {
-            "w": 20,
-            "h": 20,
+            'dims': [20, 20],
             "state": {
                 "http://me": {"x": 3, "y": 3, "direction": "E"},
                 "http://him": {
