@@ -17,6 +17,7 @@ import logging
 from collections import defaultdict
 
 from flask import Flask, request
+from flask.json import jsonify
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG"))
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ moves = ["F", "T", "L", "R"]
 
 class GameLogic:
     # kind of ugly global state ...
-    __instance = None
+    _instance = None
 
     def __init__(self, data):
         self.update(data)
@@ -41,14 +42,14 @@ class GameLogic:
         self.h = data["arena"]["h"]
         self.direction = self.self_data["direction"]
         self.pos2obj = defaultdict(lambda: None)
-        for obj in data["arena"]:
+        for obj in data["arena"]["state"].values():
             self.pos2obj[obj["x"], obj["y"]] = obj
 
     @classmethod
     def instance(cls, data):
-        if not cls.instance:
-            cls.instance = cls(data)
-        return cls.instance
+        if not cls._instance:
+            cls._instance = cls(data)
+        return cls._instance
 
     def get_colliding_object(self, data):
         x, y = self.x, self.y
@@ -82,9 +83,11 @@ class GameLogic:
             logger.info(f"Im directed to {self.direction} - turn right")
             return "R"
 
-        if self.direction == "S":
-            logger.info(f"Im directed to {self.direction} - turn left")
-            return "L"
+        # otherwise ... turn left
+        # if self.direction == "S":
+        logger.info(f"Im probably directed to S ({self.direction})"
+                    " - turn left")
+        return "L"
 
 
 @app.route("/", methods=["GET"])
@@ -94,9 +97,11 @@ def index():
 
 @app.route("/", methods=["POST"])
 def move():
-    data = request.get_data()
-    logger.info(request.json)
-    return GameLogic.instance(data).calc_next_move(data)
+    data = request.json
+    logger.info(data)
+    return jsonify(
+        GameLogic.instance(data).calc_next_move(data)
+    )
 
 
 if __name__ == "__main__":
