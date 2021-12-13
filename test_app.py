@@ -12,17 +12,15 @@ def client():
 
 def test_1vs1_will_throw(client):
     payload = {
-        "_links": {"self": "http://me"},
+        "_links": {"self": {"href": "http://me"}},
         "arena": {
             "w": 20,
             "h": 20,
             "state": {
-                "http://me": {
-                    "x": 3, "y": 3,
-                    'direction': 'E'
-                },
+                "http://me": {"x": 3, "y": 3, "direction": "E"},
                 "http://him": {
-                    "x": 11, "y": 3,
+                    "x": 11,
+                    "y": 3,
                     "direction": "E",
                 },
             },

@@ -1,2 +1,2 @@
 test:
-	pytest -x -v .
+	pytest -x -v . --tb=native

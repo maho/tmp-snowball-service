@@ -34,7 +34,7 @@ class GameLogic:
         self.update(data)
 
     def update(self, data):
-        self.self_link = data["_links"]["self"]
+        self.self_link = data["_links"]["self"]["href"]
         self.self_data = data["arena"]["state"][self.self_link]
         self.x = self.self_data["x"]
         self.y = self.self_data["y"]
